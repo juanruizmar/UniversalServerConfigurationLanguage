@@ -86,9 +86,6 @@ de un lenguaje de programación que permita configurar un servidor Web utilizand
   - Bool -> On | Off
   - Quotes -> \”
   - Domain ->  (Poner lista de dominios validos)
-  - Path -> Dash cadena | Path Dash cadena
-  - EmailAddress -> CadenaCompleta At Domain Extension
-  - WebAddress -> "www" Dot cadena Dot Extensions
 
   
 
@@ -100,6 +97,11 @@ de un lenguaje de programación que permita configurar un servidor Web utilizand
   - DIRECTIVAS-> "Listen" int | "KeepAlive" bool | "Timeout" int | 
   
     "ServerName" webAddress | "ServerAdmin" emailAddress | "DocumentRoot" Dash cadena Dash cadena dash | "DirectoryIndex" index.html | "DirectoryIndex" cadena extensions
+    
+  - PATH -> Dash cadena | Path Dash cadena
+  - EMAIL_ADDRESS -> CadenaCompleta At Domain Extension
+  - WEB_ADDRESS -> "www" Dot cadena Dot Extensions
+
 
 ### **Directivas no obligatorias:**
 
