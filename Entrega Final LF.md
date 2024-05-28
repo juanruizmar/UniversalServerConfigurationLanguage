@@ -156,12 +156,21 @@ de un lenguaje de programación que permita configurar un servidor Web utilizand
 
 - Léxico:
   - TestString -> “REQUEST_URI” | “REQUEST_FILENAME” | “QUERY_STRING” | “REMOTE_ADDR”
-  - CondPattern -> // Otra expresión regular (por aclarar)
   - Pattern -> .*’(‘.*’)’.*
   - Substitution -> $1
+    // Lo siguiente es porque el COND_PATTERN ha sido definido como una gramática a parte (con su propio lexer y su propio parser, esta es la parte del lexer)
+  - CPBasicAux = r'\.'
+  - CPCierres = r'\*|\+'
+  - CPChar = r'\^|\$|\.|\\|\!|\*|\+'
   
 - Sintáctico:
   - RE_WRITE_RULE-> “RewriteCond” TestString CondPattern | “RewriteRule” Pattern Substitution
+    // Lo siguiente es porque el COND_PATTERN ha sido definido como una gramática a parte (con su propio lexer y su propio parser, esta es la parte del parser)
+  - COND_PATTERN = r'CP_INNER|CP_INNER\$|\^CP_INNER|\^CP_INNER\$'
+  - CP_INNER = r'CP_INNER_AUX | CP_INNER CP_INNER_AUX'
+  - CP_INNER_AUX = r'CP_BASIC|\! CP_BASIC|CP_BASIC CPCierres|\! CP_BASIC CPCierres'
+  - CP_BASIC = r'CP_BASIC_AUX|CP_BASIC CP_BASIC_AUX'
+  - CP_BASIC_AUX = r'|\\ CPChar'
 
 ###  
 
