@@ -160,19 +160,19 @@ de un lenguaje de programación que permita configurar un servidor Web utilizand
   - Substitution -> $1
 
 - Léxico auxiliar para COND_PATTERN
-  - CPBasicAux = r'\.'
-  - CPCierres = r'\*|\+'
-  - CPChar = r'\^|\$|\.|\\|\!|\*|\+'
+  - CPBasicAux -> \.
+  - CPCierres -> \* | \+
+  - CPChar -> \^ | \$ | \. | \\ | \! | \* | \+
   
 - Sintáctico:
   - RE_WRITE_RULE-> “RewriteCond” TestString CondPattern | “RewriteRule” Pattern Substitution
-  - COND_PATTERN = r'CP_INNER|CP_INNER\$|\^CP_INNER|\^CP_INNER\$'
+  - COND_PATTERN -> CP_INNER | CP_INNER \$ | \^ CP_INNER | \^ CP_INNER \$
 
 - Sintáctico auxiliar para COND_PATTERN
-  - CP_INNER = r'CP_INNER_AUX | CP_INNER CP_INNER_AUX'
-  - CP_INNER_AUX = r'CP_BASIC|\! CP_BASIC|CP_BASIC CPCierres|\! CP_BASIC CPCierres'
-  - CP_BASIC = r'CP_BASIC_AUX|CP_BASIC CP_BASIC_AUX'
-  - CP_BASIC_AUX = r'|\\ CPChar'
+  - CP_INNER -> CP_INNER_AUX | CP_INNER CP_INNER_AUX
+  - CP_INNER_AUX -> CP_BASIC | \! CP_BASIC | CP_BASIC CPCierres | \! CP_BASIC CPCierres
+  - CP_BASIC -> CP_BASIC_AUX | CP_BASIC CP_BASIC_AUX
+  - CP_BASIC_AUX -> \epsilon | \\ CPChar
 
 ###  
 
