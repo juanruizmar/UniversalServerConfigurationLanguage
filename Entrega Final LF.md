@@ -90,15 +90,18 @@ de un lenguaje de programación que permita configurar un servidor Web utilizand
   
 
 - Al sintáctico:
-  - STATEMENT_LIST-> Statement StamentList | Statement
+  - StatementList-> Statement StatementList | Statement
+  - Statement -> Directiva | DirectivaBloque | VIRTUAL_HOST | MODULO
   
-  - STATEMENT-> Directiva | DirectivaBloque | VirtualHost | Modulo
-  
-  - DIRECTIVAS-> "Listen" int | "KeepAlive" bool | "Timeout" int | "ServerName" webAddress | "ServerAdmin" emailAddress | "DocumentRoot" Dash cadena Dash cadena dash | "DirectoryIndex" index.html | "DirectoryIndex" cadena extensions
+  - Directiva -> "Listen" int | "KeepAlive" bool | "Timeout" int | "ServerName" WebAddress | "ServerAdmin" EmailAddress | "DocumentRoot" PathFolder | "DirectoryIndex" index.html | "DirectoryIndex" PathFile | "ErrorLog" PathFile
     
-  - PATH -> Dash cadena | Path Dash cadena
-  - EMAIL_ADDRESS -> CadenaCompleta At Domain Extension
-  - WEB_ADDRESS -> "www" Dot cadena Dot Extensions
+  - PathFolder -> Dash | Dash Cadena PathFolder
+  - PathFile -> PathFolder File | File
+  - EmailAddress -> Cadena At Domain Dot Extension
+  - WebAddress -> "www" Dot Cadena Dot Extension
+  - File -> Cadena Dot Extension
+  - IP -> int Dot int Dot int Dot int Port
+  - Port -> epsilon | ":" int
 
 
 ### **Directivas no obligatorias:**
@@ -112,8 +115,8 @@ de un lenguaje de programación que permita configurar un servidor Web utilizand
 
 - Sintáctico:
 
-  - OPTIONS-> "Options" OptionsVar
-  - ERROR_DOCUMENT-> Path ErrorDocument
+  - Directiva -> "Options" OptionsVar
+  - Directiva -> "ErrorDocument" Errors PathFile
 
   
 
@@ -126,7 +129,7 @@ de un lenguaje de programación que permita configurar un servidor Web utilizand
   
 
 - Sintácticos:
-  - MULTIPROCESAMIENTO-> "Multiprocesamiento" MultiprocOptions
+  - Directiva -> "Multiprocesamiento" MultiprocOptions
 
 ### **Módulo Expires:**
 
@@ -142,12 +145,11 @@ de un lenguaje de programación que permita configurar un servidor Web utilizand
 
 - Sintáctico:
 
-  - TIME_PERIOD-> int TimeUnit | TimePeriod Time Unit
-  - FILE_TYPE_OR_ENCODING-> FileType | Encoding
-  - BASE-> BaseNow | BaseOther TimePeriod
-  - EXPIRES_BODY-> Quotes Base Quote
-  - EXPIRES-> “ExpiresDefault” ExpiresBody | “ExpiresByType” FileTypeOrEncoding ExpiresBody
-  
+  - Expires -> “ExpiresByType” FileTypeEncoding ExpiresBody | “ExpiresDefault” ExpiresBody
+  - FileTypeEncoding -> FileType Dash Encoding
+  - ExpiresBody -> Quotes Base Quote
+  - BASE -> BaseNow | BaseOther TimePeriod
+  - TimePeriod -> int TimeUnit | int TimeUnit TimePeriod
   
 
 ### **Módulo Sobreescritura:**
@@ -163,8 +165,9 @@ de un lenguaje de programación que permita configurar un servidor Web utilizand
   - CPChar -> \^ | \$ | \. | \\ | \! | \* | \+
   
 - Sintáctico:
-  - RE_WRITE_RULE-> “RewriteCond” TestString CondPattern | “RewriteRule” Pattern Substitution
-  - COND_PATTERN -> CP_INNER | CP_INNER \$ | \^ CP_INNER | \^ CP_INNER \$
+  - Sobreescritura -> RewriteCond Sobreescritura | RewriteCond
+  - RewriteCond -> “RewriteCond” TestString CondPattern RewriteCond | “RewriteCond” TestString CondPattern RewriteRule
+  - RewriteRule -> “RewriteRule” Pattern Substitution | “RewriteRule” Pattern Substitution RewriteRule | “RewriteRule” Pattern Substitution RewriteCond
 
 - Sintáctico auxiliar para COND_PATTERN
   - CP_INNER -> CP_INNER_AUX | CP_INNER CP_INNER_AUX
@@ -177,16 +180,16 @@ de un lenguaje de programación que permita configurar un servidor Web utilizand
 ### **Directiva de bloques:**
 
 - Sintácticos: 
-  - DIRECTIVA_BLOQUES-> “<Directory” cadena “>” StatementList “</Directory>” | 
+  - DirectivaBloque-> “<Directory” PathFolder “>” StatementList “</Directory>” | 
   
-    “<Files” cadena “>” StatementList“</Files>” | “<Location” cadena “>” StatementList“</Location>”
+    “<Files” PathFile “>” StatementList“</Files>” | “<Location” WebAddress “>” StatementList“</Location>”
   
     
 
 ### **VirtualHost:**
 
 - Sintácticos:
-  - VIRTUAL_HOST-> “<VirtualHost” cadena “>” StatementList “</VirtualHost>”
+  - VirtualHost-> “<VirtualHost” IP “>” StatementList “</VirtualHost>”
   
   
 
