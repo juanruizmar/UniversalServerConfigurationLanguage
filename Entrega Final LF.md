@@ -94,9 +94,7 @@ de un lenguaje de programación que permita configurar un servidor Web utilizand
   
   - STATEMENT-> Directiva | DirectivaBloque | VirtualHost | Modulo
   
-  - DIRECTIVAS-> "Listen" int | "KeepAlive" bool | "Timeout" int | 
-  
-    "ServerName" webAddress | "ServerAdmin" emailAddress | "DocumentRoot" Dash cadena Dash cadena dash | "DirectoryIndex" index.html | "DirectoryIndex" cadena extensions
+  - DIRECTIVAS-> "Listen" int | "KeepAlive" bool | "Timeout" int | "ServerName" webAddress | "ServerAdmin" emailAddress | "DocumentRoot" Dash cadena Dash cadena dash | "DirectoryIndex" index.html | "DirectoryIndex" cadena extensions
     
   - PATH -> Dash cadena | Path Dash cadena
   - EMAIL_ADDRESS -> CadenaCompleta At Domain Extension
