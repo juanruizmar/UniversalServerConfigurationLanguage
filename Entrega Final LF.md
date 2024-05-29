@@ -90,10 +90,11 @@ de un lenguaje de programación que permita configurar un servidor Web utilizand
   
 
 - Al sintáctico:
-  - StatementList-> Statement StatementList | Statement
-  - Statement -> Directiva | DirectivaBloque | VIRTUAL_HOST | MODULO
+  - StatementList -> Statement StatementList | Statement
+  - Statement -> DirectivaBloque | VirtualHost | Directiva | Modulo
+  - Modulo -> Expires | Sobrescritura
   
-  - Directiva -> "Listen" int | "KeepAlive" bool | "Timeout" int | "ServerName" WebAddress | "ServerAdmin" EmailAddress | "DocumentRoot" PathFolder | "DirectoryIndex" index.html | "DirectoryIndex" PathFile | "ErrorLog" PathFile
+  - Directiva -> "Listen" int | "KeepAlive" bool | "Timeout" int | "ServerName" WebAddress | "ServerAdmin" EmailAddress | "DocumentRoot" PathFolder | "DirectoryIndex" PathFile | "ErrorLog" PathFile
     
   - PathFolder -> Dash | Dash Cadena PathFolder
   - PathFile -> PathFolder File | File
@@ -182,7 +183,7 @@ de un lenguaje de programación que permita configurar un servidor Web utilizand
 - Sintácticos: 
   - DirectivaBloque-> “<Directory” PathFolder “>” StatementList “</Directory>” | 
   
-    “<Files” PathFile “>” StatementList“</Files>” | “<Location” WebAddress “>” StatementList“</Location>”
+    “<Files” PathFile “>” StatementList “</Files>” | “<Location” WebAddress “>” StatementList “</Location>”
   
     
 
