@@ -57,7 +57,7 @@ class CalcParser(Parser):
     
     @_('DIRECTIVE_PFD Pathfolder')
     def Directive(self, p):
-        return ('Directive', p.DIRECTIVE_PFd, p.Pathfolder)
+        return ('Directive', p.DIRECTIVE_PFD, p.Pathfolder)
     
     @_('DIRECTIVE_PF Pathfile')
     def Directive(self, p):
@@ -78,7 +78,7 @@ class CalcParser(Parser):
     # Reglas para módulo Expires
     @_('EXPIRESBYTYPE FILE_TYPE "/" ENCODING Expires_Body')
     def Expires(self, p):
-        return ('Expires', p.EXPIRESBYTYPE, p.FileType, p.Dash, p.ENCODING, p.Expires_Body)
+        return ('Expires', p.EXPIRESBYTYPE, p.FILE_TYPE, "/", p.ENCODING, p.Expires_Body)
 
     @_('EXPIRESDEFAULT Expires_Body')
     def Expires(self, p):
@@ -113,37 +113,37 @@ class CalcParser(Parser):
     def Sobreescritura(self, p):
         return ('Sobreescritura', p.Rewrite_Cond)
 
-    @_('RWCOND TEST_STRING PATTERN Rewrite_Cond')
+    @_('RWCOND TEST_STRING STRING Rewrite_Cond')
     def Rewrite_Cond(self, p):
-        return ('Rewrite_Cond', p.TEST_STRING, p.PATTERN, p.Rewrite_Cond)
+        return ('Rewrite_Cond', p.TEST_STRING, p.STRING, p.Rewrite_Cond)
 
-    @_('RWCOND TEST_STRING PATTERN Rewrite_Rule')
+    @_('RWCOND TEST_STRING STRING Rewrite_Rule')
     def Rewrite_Cond(self, p):
-        return ('Rewrite_Cond', p.TEST_STRING, p.PATTERN, p.Rewrite_Rule)
+        return ('Rewrite_Cond', p.TEST_STRING, p.STRING, p.Rewrite_Rule)
 
-    @_('RWRULE PATTERN SUBSTITUTION')
+    @_('RWRULE STRING SUBSTITUTION')
     def Rewrite_Rule(self, p):
-        return ('Rewrite_Rule', p.PATTERN, p.SUBSTITUTION)
+        return ('Rewrite_Rule', p.STRING, p.SUBSTITUTION)
 
-    @_('RWRULE PATTERN SUBSTITUTION Rewrite_Rule')
+    @_('RWRULE STRING SUBSTITUTION Rewrite_Rule')
     def Rewrite_Rule(self, p):
-        return ('Rewrite_Rule', p.PATTERN, p.SUBSTITUTION, p.Rewrite_Rule)
+        return ('Rewrite_Rule', p.STRING, p.SUBSTITUTION, p.Rewrite_Rule)
 
     # Reglas para directiva de bloques
-    @_('PREBLOQUE_D Pathfolder ">" Statement_List POSTBLOQUE_D')
+    @_('"<" DIRECTORY_B Pathfolder ">" "{" Statement_List "}"')
     def Directiva_Bloque(self, p):
         return ('Directiva_Bloque_directory', p.Pathfolder, p.Statement_List)
 
-    @_('PREBLOQUE_F Pathfile ">" Statement_List POSTBLOQUE_F')
+    @_('"<" FILES_B Pathfile ">" "{" Statement_List "}"')
     def Directiva_Bloque(self, p):
         return ('Directiva_Bloque_files', p.Pathfile, p.Statement_List)
 
-    @_('PREBLOQUE_L Web_Address ">" Statement_List POSTBLOQUE_L')
+    @_('"<" LOCATION_B Web_Address ">" "{" Statement_List "}"')
     def Directiva_Bloque(self, p):
         return ('Directiva_Bloque_location', p.Web_Address, p.Statement_List)
 
     # Reglas para Virtualhost
-    @_('PREBLOQUE_V IP ">" Statement_List POSTBLOQUE_V')
+    @_('"<" VIRTUALHOST_B IP ">" "{" Statement_List "}"')
     def Virtualhost(self, p):
         return ('Virtualhost', p.IP, p.Statement_List)
     
@@ -178,7 +178,7 @@ class CalcParser(Parser):
     
     @_('INT "." INT "." INT "." INT Port')
     def IP(self,p):
-        return p.INT + "." + p.INT + "." + p.INT + "." +p.INT + p.Port
+        return p.INT0 + "." + p.INT1 + "." + p.INT2 + "." +p.INT3 + p.Port
     
     @_('":" INT')
     def Port(self,p):
@@ -192,12 +192,23 @@ class CalcParser(Parser):
 
 lexer = CalcLexer()
 parser = CalcParser()
-while True:
-    try:
-        text = input('calc > ')
-        if text:
-            tokens = lexer.tokenize(text)
-            result = parser.parse(tokens)
-            print(result)
-    except EOFError:
-        break
+#while True:
+#    try:
+#        text = input('calc > ')
+#        if text:
+#            tokens = lexer.tokenize(text)
+#            result = parser.parse(tokens)
+#            print(result)
+#    except EOFError:
+#        break
+text = ""
+with open("./prueba_Paser_LenguajeServer.txt") as f:
+    text += f.read()
+
+if text:
+    tokens = lexer.tokenize(text)
+    tokens2 = tokens
+    #for token in tokens2:
+    #    print('type=%r, value=%r' % (token.type, token.value))
+    result = parser.parse(tokens)
+    print(result)

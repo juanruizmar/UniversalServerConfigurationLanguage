@@ -3,17 +3,19 @@ from sly import Lexer
 class CalcLexer(Lexer):
 	tokens = {
 	    DIRECTIVE_INT, DIRECTIVE_BOOL, DIRECTIVE_WA, DIRECTIVE_EA,
-	    DIRECTIVE_PFD, DIRECTIVE_PF, PREBLOQUE_D, POSTBLOQUE_D,
-	    PREBLOQUE_F, POSTBLOQUE_F, PREBLOQUE_L, POSTBLOQUE_L,
-	    PREBLOQUE_V, POSTBLOQUE_V, RWCOND, RWRULE, EXPIRESBYTYPE,
+	    DIRECTIVE_PFD, DIRECTIVE_PF, DIRECTORY_B, FILES_B,
+		LOCATION_B, VIRTUALHOST_B, RWCOND, RWRULE, EXPIRESBYTYPE,
 	    EXPIRESDEFAULT, OPTIONS, ERRORDOCUMENT,
 		EXTENSION, INT, STRING, BOOL, DOMAIN, SUBDOMAIN,
 		OPTIONS_VAR, ERRORS, MULTIPROC_OPTIONS, MULTIPROCESS,
 		BASE_NOW, BASE_OTHER, TIME_UNIT, FILE_TYPE, ENCODING, 
-		TEST_STRING, PATTERN, SUBSTITUTION
+		TEST_STRING, SUBSTITUTION
 	}
 	ignore = r' |\t'
-	literals = {'{', '}', ';', '/', '@', '.', '\"', '=', '>'}
+	literals = {'{', '}', ';', '/', '@', '.', '\"', '=', '<', '>', ':'}
+
+	def error(self,t):
+		self.index += 1
 
 	OPTIONS = r'Options'
 	ERRORDOCUMENT = r'ErrorDocument'
@@ -23,14 +25,10 @@ class CalcLexer(Lexer):
 	DIRECTIVE_EA = r'ServerAdmin'
 	DIRECTIVE_PFD = r'DocumentRoot'
 	DIRECTIVE_PF = r'DirectoryIndex|ErrorLog'
-	PREBLOQUE_D = r'<Directory'
-	POSTBLOQUE_D = r'</Directory>'
-	PREBLOQUE_F = r'<Files'
-	POSTBLOQUE_F = r'</Files>'
-	PREBLOQUE_L = r'<Location'
-	POSTBLOQUE_L = r'</Location>'
-	PREBLOQUE_V = r'<Virtualhost'
-	POSTBLOQUE_V = r'</Virtualhost>'
+	DIRECTORY_B = r'Directory'
+	FILES_B = r'Files'
+	LOCATION_B = r'Location'
+	VIRTUALHOST_B = r'Virtualhost'
 
 	RWCOND = r'RewriteCond'
 	RWRULE = r'RewriteRule'
@@ -48,7 +46,7 @@ class CalcLexer(Lexer):
 	BASE_OTHER = r'access|remote'
 	TIME_UNIT = r'Year|Month|Day|Hour|Minute|Second'
 	FILE_TYPE = r'text|image|video'
-	ENCODING = r'html|gif|H.264'
+	ENCODING = r'gif|H.264'
 
 	BOOL = r'On|Off'
 	DOMAIN = r'gmail'	# Una lista de dominios válidos (por lo pronto sólo uno)
@@ -56,9 +54,6 @@ class CalcLexer(Lexer):
 	EXTENSION = r'html|com'
 	INT = r'\d+'
 	STRING = r'\w+'
-
-	#No funciona Pattern
-	#PATTERN = '.\'(\'.\')\'.*'
 
 # Prueba Lexer
 #lexer = CalcLexer()
