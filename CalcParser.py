@@ -39,22 +39,50 @@ class CalcParser(Parser):
         return p.Virtualhost
 
     # Reglas para directivas
-    @_('DirectiveName STRING')
+    @_('DIRECTIVE_INT INT')
     def Directive(self, p):
-        return ('Directive', p.DirectiveName, p.STRING)
+        return ('Directive', p.DIRECTIVE_INT, p.INT)
     
-    @_('"Multiprocesamiento" MULTIPROC_OPTIONS')
+    @_('DIRECTIVE_BOOL BOOL')
     def Directive(self, p):
-        return p.multiprocessing
+        return ('Directive', p.DIRECTIVE_BOOL, p.BOOL)
+    
+    @_('DIRECTIVE_WA Web_Address')
+    def Directive(self, p):
+        return ('Directive', p.DIRECTIVE_WA, p.Web_Address)
+    
+    @_('DIRECTIVE_EA Email_Address')
+    def Directive(self, p):
+        return ('Directive', p.DIRECTIVE_EA, p.Email_Address)
+    
+    @_('DIRECTIVE_PFD Pathfolder')
+    def Directive(self, p):
+        return ('Directive', p.DIRECTIVE_PFd, p.Pathfolder)
+    
+    @_('DIRECTIVE_PF Pathfile')
+    def Directive(self, p):
+        return ('Directive', p.DIRECTIVE_PF, p.Pathfile)
+    
+    @_('OPTIONS OPTIONS_VAR')
+    def Directive(self, p):
+        return ('Directive', p.OPTIONS, p.OPTIONS_VAR)
+    
+    @_('ERRORDOCUMENT ERRORS Pathfile')
+    def Directive(self, p):
+        return ('Directive', p.ERRORDOCUMENT, p.ERRORS, p.Pathfile)
+    
+    @_('MULTIPROCESS MULTIPROC_OPTIONS')
+    def Directive(self, p):
+        return (p.MULTIPROCESS, p.MULTIPROC_OPTIONS)
 
     # Reglas para módulo Expires
-    @_('"ExpiresByType" FILE_TYPE "/" ENCODING Expires_Body')
+    @_('EXPIRESBYTYPE FILE_TYPE "/" ENCODING Expires_Body')
     def Expires(self, p):
-        return ('Expires', p.ExpiresByType, p.FileType, p.Dash, p.ENCODING, p.Expires_Body)
+        return ('Expires', p.EXPIRESBYTYPE, p.FileType, p.Dash, p.ENCODING, p.Expires_Body)
 
-    @_('"ExpiresDefault" Expires_Body')
+    @_('EXPIRESDEFAULT Expires_Body')
     def Expires(self, p):
-        return ('Expires', p.ExpiresDefault, p.Expires_Body)
+        return ('Expires', p.EXPIRESDEFAULT, p.Expires_Body)
 
     @_('"\"" Base "\""')
     def Expires_Body(self, p):
@@ -85,80 +113,80 @@ class CalcParser(Parser):
     def Sobreescritura(self, p):
         return ('Sobreescritura', p.Rewrite_Cond)
 
-    @_('"RewriteCond" TEST_STRING PATTERN Rewrite_Cond')
+    @_('RWCOND TEST_STRING PATTERN Rewrite_Cond')
     def Rewrite_Cond(self, p):
         return ('Rewrite_Cond', p.TEST_STRING, p.PATTERN, p.Rewrite_Cond)
 
-    @_('"RewriteCond" TEST_STRING PATTERN Rewrite_Rule')
+    @_('RWCOND TEST_STRING PATTERN Rewrite_Rule')
     def Rewrite_Cond(self, p):
         return ('Rewrite_Cond', p.TEST_STRING, p.PATTERN, p.Rewrite_Rule)
 
-    @_('"RewriteRule" PATTERN SUBSTITUTION')
+    @_('RWRULE PATTERN SUBSTITUTION')
     def Rewrite_Rule(self, p):
         return ('Rewrite_Rule', p.PATTERN, p.SUBSTITUTION)
 
-    @_('"RewriteRule" PATTERN SUBSTITUTION Rewrite_Rule')
+    @_('RWRULE PATTERN SUBSTITUTION Rewrite_Rule')
     def Rewrite_Rule(self, p):
         return ('Rewrite_Rule', p.PATTERN, p.SUBSTITUTION, p.Rewrite_Rule)
 
     # Reglas para directiva de bloques
-    @_('"<Directory" Pathfolder ">" Statement_List "</Directory>"')
+    @_('PREBLOQUE_D Pathfolder ">" Statement_List POSTBLOQUE_D')
     def Directiva_Bloque(self, p):
         return ('Directiva_Bloque_directory', p.Pathfolder, p.Statement_List)
 
-    @_('"<Files" Pathfile ">" Statement_List "</Files>"')
+    @_('PREBLOQUE_F Pathfile ">" Statement_List POSTBLOQUE_F')
     def Directiva_Bloque(self, p):
         return ('Directiva_Bloque_files', p.Pathfile, p.Statement_List)
 
-    @_('"<Location" Web_Address ">" Statement_List "</Location>"')
+    @_('PREBLOQUE_L Web_Address ">" Statement_List POSTBLOQUE_L')
     def Directiva_Bloque(self, p):
         return ('Directiva_Bloque_location', p.Web_Address, p.Statement_List)
 
     # Reglas para Virtualhost
-    @_('"<Virtualhost" IP ">" Statement_List "</Virtualhost>"')
+    @_('PREBLOQUE_V IP ">" Statement_List POSTBLOQUE_V')
     def Virtualhost(self, p):
         return ('Virtualhost', p.IP, p.Statement_List)
     
     #Reglas Auxiliares
     @_('"/"')
     def Pathfolder(self,p):
-        return
+        return "/"
     
     @_('"/" STRING Pathfolder')
     def Pathfolder(self,p):
-        return
+        return "/" + p.STRING + p.Pathfolder
     
     @_('Pathfolder File')
     def Pathfile(self,p):
-        return
+        return p.Pathfolder + p.File
     
     @_('File')
     def Pathfile(self,p):
-        return
+        return p.File
     
-    @_('STRING "@" Domain "." EXTENSION')
+    @_('STRING "@" DOMAIN "." EXTENSION')
     def Email_Address(self,p):
-        return
+        return p.STRING + "@" + p.DOMAIN + "." + p.EXTENSION
     
-    @_('"www." STRING "." EXTENSION')
+    @_('SUBDOMAIN "." STRING "." EXTENSION')
     def Web_Address(self,p):
-        return
+        return "www" + "." + p.STRING + "." + p.EXTENSION
     
     @_('STRING "." EXTENSION')
     def File(self,p):
-        return
+        return p.STRING + "." + p.EXTENSION
     
     @_('INT "." INT "." INT "." INT Port')
     def IP(self,p):
-        return
+        return p.INT + "." + p.INT + "." + p.INT + "." +p.INT + p.Port
     
     @_('":" INT')
     def Port(self,p):
-        return
+        return ":" + p.INT
     
     @_('')
     def Port(self,p):
-        return
+        pass
     
 
 
