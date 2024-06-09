@@ -1,0 +1,26 @@
+Listen 88
+KeepAlive On
+Timeout 60
+ServerName www.prueba.com
+ServerAdmin admin@gmail.com
+DocumentRoot /
+DirectoryIndex index.html
+Options followsymlinks
+Multiprocesar prefork
+
+<Location www.prueba2.com > {
+    DocumentRoot /
+    }
+
+<Virtualhost 12.12.12.12:80 > {
+    <Directory /cosas/ > {
+        ExpiresByType image / gif " now "
+        }
+    }
+
+<Files errores.html > {
+    ExpiresDefault " remote 12 Day 2 Month "
+    }
+
+ErrorLog errores.html
+ErrorDocument 404 er.html
